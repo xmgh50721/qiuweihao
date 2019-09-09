@@ -7,8 +7,17 @@
       placeholder="接下去要做什么？"
       @keyup.enter="addTodo"
     >
-    <item :todo="todo"></item>
-    <Tabs :filter="filter"></Tabs>
+    <!-- v-model="textContent" -->
+    <item v-for="todo in newtodos" 
+          :key="todo.id" 
+          :todo="todo" 
+          v-on:del = "delId"
+    />
+    <Tabs 
+      :todos="todoArray" 
+      :filter="filter"
+      v-on:togger = "toggerFilter"
+      v-on:delcompleted = "delCompleteds"></Tabs>
   </section>
 </template>
 
@@ -19,22 +28,51 @@ let id = 0;
 export default {
   data() {
     return {
-      todo: {
-        id: 0,
-        content: "this is todo",
-        completed: "completed"
-      },
-      filter: 2
+      todoArray: [],
+      filter: 'all',
+      // textContent: ''
     };
   },
   components: {
     Item,
     Tabs
   },
-  computed: {},
+  computed: {
+    newtodos(params) {
+      if (this.filter === 'all') {
+        return this.todoArray
+      }
+      const completed = this.filter === 'active'
+      return this.todoArray.filter(todo => completed !== todo.completed)
+    }
+  },
   methods: {
-    addTodo(e) {}
-  }
+    addTodo(e) {
+      this.todoArray.unshift({
+        id: id++,
+        content: e.target.value.trim(),
+        completed: false,
+      })
+      e.target.value = ''
+      // let newPlane = {
+      //   id: this.todoArray.length + 1,
+      //   content: this.textContent,
+      //   completed: false
+      // }
+      // this.todoArray.push(newPlane)
+      // this.textContent = ''
+    },
+    toggerFilter(filter) {
+      this.filter = filter
+    },
+    delCompleteds() {
+      console.log("???")
+      this.todoArray = this.todoArray.filter(todo => todo.completed !== true)
+    },
+    delId(id) {
+      this.todoArray.splice(this.todoArray.findIndex(todo => todo.id === id),1)
+    }
+  },
 };
 </script>
 

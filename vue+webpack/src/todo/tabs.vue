@@ -1,6 +1,6 @@
 <template>
   <div class="helper">
-    <span class="left">2 items left</span>
+    <span class="left">{{todos.length}} items left</span>
     <span class="tabs">
       <span
         v-for="state in states"
@@ -22,10 +22,10 @@ export default {
       type: String,
       required: true,
     },
-    // todos: {
-    //   type: Array,
-    //   required: true,
-    // }
+    todos: {
+      type: Array,
+      required: true,
+    }
   },
   data() {
     return {
@@ -39,10 +39,10 @@ export default {
   },
   methods: {
     clearAllCompleted() {
-      this.$emit('clearAllCompleted')
+      this.$emit('delcompleted')
     },
     toggleFilter(state) {
-      this.$emit('toggle', state)
+      this.$emit('togger', state)
     }
   }
 }
